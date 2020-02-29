@@ -12,6 +12,37 @@ function nonAccentVietnamese(str) {
     return str;
 }
 
+function removeAccentHatVietnamese(str) {
+    str = str.toLowerCase();
+    str = str.replace(/â|ă/g, "a");
+    str = str.replace(/à|ầ|ằ/g, "à");
+    str = str.replace(/á|ấ|ắ/g, "á");
+    str = str.replace(/ả|ẩ|ẳ/g, "ả");
+    str = str.replace(/ã|ẫ|ẵ/g, "ã");
+    str = str.replace(/ạ|ậ|ặ/g, "ạ");
+    str = str.replace(/ê/g, "e");
+    str = str.replace(/è|ề/g, "è");
+    str = str.replace(/é|ế/g, "é");
+    str = str.replace(/ẻ|ể/g, "ẻ");
+    str = str.replace(/ẽ|ễ/g, "ẽ");
+    str = str.replace(/ẹ|ệ/g, "ẹ");
+    str = str.replace(/ô|ơ/g, "o");
+    str = str.replace(/ò|ồ|ờ/g, "ò");
+    str = str.replace(/ó|ố|ớ/g, "ó");
+    str = str.replace(/ỏ|ổ|ở/g, "ỏ");
+    str = str.replace(/õ|ỗ|ỗ/g, "õ");
+    str = str.replace(/ọ|ộ|ợ/g, "ọ");
+    str = str.replace(/ư/g, "u");
+    str = str.replace(/ù|ừ/g, "ù");
+    str = str.replace(/ú|ứ/g, "ú");
+    str = str.replace(/ủ|ử/g, "ủ");
+    str = str.replace(/ũ|ữ/g, "ũ");
+    str = str.replace(/ụ|ự/g, "ụ");
+    str = str.replace(/đ/g, "d");
+    str = str.replace(/\u02C6|\u0306|\u031B/g, "");
+    return str;
+}
+
 function removeAccentMarksVietnamese(str) {
     str = str.toLowerCase();
     str = str.replace(/à|á|ả|ã|ạ/g, "a");
@@ -31,12 +62,14 @@ function removeAccentMarksVietnamese(str) {
 }
 
 function compareSearch(item, searchValue) {
-    if (!nonAccentVietnamese(item).includes(nonAccentVietnamese(searchValue)))
-        return false;
-    if (removeAccentMarksVietnamese(item).includes(removeAccentMarksVietnamese(searchValue)))
-        return true;
-    
-    return true;
+    item = item.toLowerCase();
+    searchValue = searchValue.toLowerCase();
+    if (item.includes(searchValue)) return true;
+    if (!nonAccentVietnamese(item).includes(nonAccentVietnamese(searchValue))) return false;
+    if (nonAccentVietnamese(item).includes(searchValue)) return true;
+    if (removeAccentMarksVietnamese(item).includes(searchValue)) return true;
+    if (removeAccentHatVietnamese(item).includes(searchValue)) return true;
+    return false;
 }
 
 (function test() {
@@ -79,6 +112,7 @@ function testSuite() {
         ['ê', ['ê', 'e'], true],
 
         ['ee', ['ee', 'e'], true],
+        ['Cấp quản lý đề tài', ['câ', 'c', 'ca', 'cấ', 'â', 'ấ', 'ấp', 'cấp'], true],
     ]
 }
 
@@ -96,4 +130,4 @@ function testSuiteReverse() {
         //a[i].forEach((j, index) => j.length !== 0 ? b.push([i, j, !!index]) : null));
     return b;
 }
-testSuiteRevert().forEach(i => console.log(i[0],'\t=>',i[1]));
+// testSuiteReverse().forEach(i => console.log(i[0],'\t=>',i[1]));
