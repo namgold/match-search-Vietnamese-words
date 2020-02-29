@@ -82,7 +82,7 @@ function testSuite() {
     ]
 }
 
-function testSuiteRevert() {
+function testSuiteReverse() {
     a = {}
     testSuite().forEach(i => {
         i[1].forEach(j => {
